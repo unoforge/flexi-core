@@ -1,129 +1,66 @@
-# Contributing to Flexiwind CLI
+# Contributing to Flexi Core
 
-Thank you for considering a contribution! This guide explains how to set up your environment, propose changes, and submit high‑quality pull requests.
+This guide is specific to `packages/core`.
 
-## Code of Conduct
+## Purpose of Core
 
-By participating, you agree to uphold a respectful, inclusive environment. Be kind and constructive.
+`packages/core` is the shared logic layer for Flexi packages.
 
-## Getting Started
+- Keep business/workflow logic here.
+- Keep CLI UI and command surface outside core.
 
-1. Fork the repository and clone your fork.
-2. Install PHP dependencies:
-   ```bash
-   composer install
-   ```
-3. Verify the CLI runs locally:
-   ```bash
-   # via PHP
-   php bin/flexi-cli --help
-   
-   # or if executable bit is set
-   ./bin/flexi-cli --help
-   ```
+## Architecture Rules
 
-## Project Structure Overview
+1. No command framework classes in core.
+   - Do not add Symfony Console command/input/output classes.
+   - Do not add Laravel Artisan command classes.
+2. Core APIs should accept plain PHP values (arrays/strings/bools/DTOs), not CLI framework objects.
+3. User interaction orchestration (command options, signatures, command registration) belongs to package-specific CLI layers.
 
-- `bin/flexi-cli`: CLI entry point
-- `src/Command/`: Symfony Console commands
-- `src/Core/`, `src/Service/`, `src/Installer/`: core logic and helpers
-- `stubs/`: template files used by installers/scaffolding
-- `docs/`: user documentation (index and per‑command pages)
+## Project Structure
 
-## Development Workflow
+- `src/Core/`: constants, schema/config/file generation internals
+- `src/Service/`: reusable workflow/domain services
+- `src/Installer/`: package manager installers and adapters
+- `src/Utils/`: utility functions (http/file)
+- `src/Libs/`: orchestration helpers used by CLI layers
+- `stubs/`: scaffold templates
 
-1. Create a feature branch from `dev-cli`:
-   ```bash
-   git checkout dev-cli
-   git pull
-   git checkout -b feat/my-change
-   ```
-2. Make changes with clear, focused commits (see Commit Style below).
-3. Run the CLI locally to test your changes (see Testing Changes).
-4. Update or add docs where needed (see Documentation below).
-5. Open a Pull Request against `dev-cli`.
+## Local Development
 
-## Commit Style
+From `packages/core`:
 
-Use Conventional Commits to keep history consistent:
+```bash
+composer install
+```
 
-- `feat: add something new`
-- `fix: resolve a bug`
-- `docs: update docs`
-- `refactor: improve code without changing behavior`
-- `chore: tooling or maintenance`
-- `perf: performance improvements`
+Syntax check:
 
-Examples:
-- `feat(init): simplify default setup flow`
-- `fix(add): skip existing files without error`
+```bash
+find src -name '*.php' -print0 | xargs -0 -n1 php -l
+```
 
-## Code Style
+## Change Guidelines
 
-- Follow PSR-12 coding standards.
-- Use strict types and type hints where practical.
-- Prefer explicit, descriptive names over abbreviations.
-- Handle errors with meaningful messages; avoid silent failures.
-- Keep functions small and focused; use early returns to reduce nesting.
+- Prefer small, focused commits.
+- Keep backward compatibility for consumers (`packages/cli`, `packages/laravel`) unless a coordinated refactor is done.
+- If you change a core method signature, update both CLI packages in the same change set.
+- Add concise inline comments only where logic is non-obvious.
 
-If you use an auto‑formatter or linter locally, ensure it does not reformat unrelated code.
+## Testing Expectations
 
-## Testing Changes
+There is no full automated suite yet. For core changes:
 
-While there is not yet a formal test suite, please:
-
-- Manually exercise affected commands:
-  ```bash
-  php bin/flexi-cli init --help
-  php bin/flexi-cli add --help
-  php bin/flexi-cli build --help
-  php bin/flexi-cli validate --help
-  php bin/flexi-cli clean:flux --help
-  ```
-- For file‑writing operations, test inside a temporary sample project directory and verify generated files.
-- For network/registry features, prefer using local/test endpoints when possible.
-
-If you add testing utilities or scripts later, document them here and in `composer.json` scripts.
-
-## Documentation
-
-If your change affects behavior, options, or output, update the docs:
-
-- Docs index: `docs/README.md`
-- Per‑command pages: `docs/commands/*.md`
-
-When adding a new command:
-1. Implement in `src/Command/*Command.php`.
-2. Create a new page in `docs/commands/your-command.md` with synopsis, options, behavior, and examples.
-3. Link it from `docs/README.md` and the root `readme.md` Documentation section.
-
-## Adding/Updating Stubs
-
-- Place new templates under `stubs/` in the appropriate subfolder.
-- Keep stub file names consistent and descriptive.
-- Avoid trailing spaces and ensure newline at end of file.
+1. Run syntax checks in core.
+2. Smoke test impacted commands via consumers:
+   - Symfony CLI (`packages/cli`)
+   - Laravel Artisan (`packages/laravel`)
+3. Validate generated files when touching stubs/generation logic.
 
 ## Pull Request Checklist
 
-- [ ] Branch is up to date with `dev-cli`
-- [ ] Conventional Commit messages
-- [ ] Code follows PSR‑12 and project style
-- [ ] New/changed behavior documented in `docs/`
-- [ ] Manually tested relevant CLI commands
-- [ ] No unrelated file changes or reformatting
-
-## Reporting Issues
-
-When filing a bug report, include:
-- CLI version and PHP version (`php -v`)
-- OS and package manager (npm/yarn/pnpm) if relevant
-- Exact command(s) run and full output (or a screenshot)
-- Minimal reproduction steps or a sample repo if possible
-
-## Release Process (maintainers)
-
-- Merge features into `dev-cli`
-- After validation, fast‑forward or merge into `main` with a version bump
-- Tag the release and update changelog
-
-Thanks for contributing to Flexiwind CLI!
+- [ ] Change stays within core scope
+- [ ] No command-framework objects leaked into core APIs
+- [ ] Syntax checks pass
+- [ ] Consumer packages remain functional
+- [ ] Docs updated when behavior changes

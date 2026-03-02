@@ -25,8 +25,8 @@ class Constants
     /**
      * Schema URLs
      */
-    public const SCHEMA_URL = 'https://raw.githubusercontent.com/unoforge/cli/main/registry-item.json';
-    public const SCHEMA_REFERENCE = 'https://raw.githubusercontent.com/unoforge/cli/main/registry-item.json';
+    public const SCHEMA_URL = 'https://raw.githubusercontent.com/unoforge/flexi-core/main/registry-item.json';
+    public const SCHEMA_REFERENCE = 'https://raw.githubusercontent.com/unoforge/flexi-core/main/registry-item.json';
 
     /**
      * Default configuration file name
