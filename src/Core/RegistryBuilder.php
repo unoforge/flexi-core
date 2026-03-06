@@ -118,6 +118,7 @@ class RegistryBuilder
             }
 
             $outputFile = rtrim($outputDir, '/') . '/' . $component['name'] . '.json';
+            $this->archiveExistingRegistryVersion($outputFile, $component['name']);
             file_put_contents(
                 $outputFile,
                 json_encode($registry, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE)
@@ -171,6 +172,42 @@ class RegistryBuilder
         }
 
         return $normalized;
+    }
+
+    private function archiveExistingRegistryVersion(string $outputFile, string $componentName): void
+    {
+        if (!file_exists($outputFile)) {
+            return;
+        }
+
+        $existingContent = file_get_contents($outputFile);
+        if ($existingContent === false) {
+            warning("⚠️ Unable to read existing registry file for `{$componentName}`. Skipping version archive.");
+            return;
+        }
+
+        $existingRegistry = json_decode($existingContent, true);
+        if (!is_array($existingRegistry)) {
+            warning("⚠️ Existing registry file for `{$componentName}` is invalid JSON. Skipping version archive.");
+            return;
+        }
+
+        $existingVersion = $existingRegistry['version'] ?? null;
+        if (!is_string($existingVersion) || trim($existingVersion) === '') {
+            warning("⚠️ Existing registry file for `{$componentName}` has no version. Skipping version archive.");
+            return;
+        }
+
+        $componentVersionDir = rtrim(dirname($outputFile), '/\\') . DIRECTORY_SEPARATOR . $componentName;
+        if (!is_dir($componentVersionDir)) {
+            mkdir($componentVersionDir, 0777, true);
+        }
+
+        $archivedFilePath = $componentVersionDir . DIRECTORY_SEPARATOR . $existingVersion . '.json';
+        if (!file_exists($archivedFilePath)) {
+            file_put_contents($archivedFilePath, $existingContent);
+            info("Archived previous version for {$componentName}: {$existingVersion}");
+        }
     }
 
     private function normalizeMessageField(mixed $message, string $componentName): string|array|null
