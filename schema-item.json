@@ -35,6 +35,7 @@
         "registry:block",
         "registry:script",
         "registry:component",
+        "registry:page",
         "registry:ui",
         "registry:lib",
         "registry:example",
