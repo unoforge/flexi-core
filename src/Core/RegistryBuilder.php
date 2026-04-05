@@ -6,7 +6,7 @@ use function Laravel\Prompts\{note, info, warning, spin, confirm};
 
 class RegistryBuilder
 {
-    public function build(string $schemaPath, string $outputDir): void
+    public function build(string $schemaPath, string $outputDir, string $overrideMode = 'auto'): void
     {
         if (!file_exists($schemaPath)) {
             throw new \RuntimeException("Schema file not found: $schemaPath");
@@ -30,19 +30,30 @@ class RegistryBuilder
 
             // Check if version has changed
             $isOverride = false;
-            if ($this->hasVersionChanged($outputFile, $componentVersion)) {
+            $versionChanged = $this->hasVersionChanged($outputFile, $componentVersion);
+            
+            if ($versionChanged) {
                 note("Building component: " . $component['name']);
             } else {
-                $override = confirm(
-                    "Component '{$component['name']}' version {$componentVersion} is unchanged. Override anyway?",
-                    false
-                );
-                if (!$override) {
-                    info("⏭️ Skipping component: " . $component['name'] . " (user declined override)");
+                if ($overrideMode === 'force') {
+                    $isOverride = true;
+                    note("Building component: " . $component['name'] . " (forced override)");
+                } elseif ($overrideMode === 'never') {
+                    info("⏭️ Skipping component: " . $component['name'] . " (override disabled)");
                     continue;
+                } else {
+                    // auto mode - interactive
+                    $override = confirm(
+                        "Component '{$component['name']}' version {$componentVersion} is unchanged. Override anyway?",
+                        false
+                    );
+                    if (!$override) {
+                        info("⏭️ Skipping component: " . $component['name'] . " (user declined override)");
+                        continue;
+                    }
+                    $isOverride = true;
+                    note("Building component: " . $component['name'] . " (overriding unchanged version)");
                 }
-                $isOverride = true;
-                note("Building component: " . $component['name'] . " (overriding unchanged version)");
             }
 
             $registry = [

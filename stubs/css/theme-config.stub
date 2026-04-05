@@ -2,6 +2,7 @@
     --font-sans: "Instrument Sans", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
     --radius-ui: var(--ui-radius);
     --radius-card: var(--card-radius);
+    --radius-card-inner: calc(var(--card-radius) - var(--card-padding));
     --radius-checkbox: var(--checkbox-radius); 
     
     --color-dark: var(--color-gray-950);
