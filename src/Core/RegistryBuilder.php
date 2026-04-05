@@ -2,7 +2,7 @@
 
 namespace FlexiCore\Core;
 
-use function Laravel\Prompts\{note, info, warning, spin};
+use function Laravel\Prompts\{note, info, warning, spin, confirm};
 
 class RegistryBuilder
 {
@@ -25,7 +25,25 @@ class RegistryBuilder
 
         foreach ($schema['components'] as $component) {
             $files = [];
-            note("Building component: " . $component['name']);
+            $componentVersion = $component['version'] ?? Constants::DEFAULT_COMPONENT_VERSION;
+            $outputFile = rtrim($outputDir, '/') . '/' . $component['name'] . '.json';
+
+            // Check if version has changed
+            $isOverride = false;
+            if ($this->hasVersionChanged($outputFile, $componentVersion)) {
+                note("Building component: " . $component['name']);
+            } else {
+                $override = confirm(
+                    "Component '{$component['name']}' version {$componentVersion} is unchanged. Override anyway?",
+                    false
+                );
+                if (!$override) {
+                    info("⏭️ Skipping component: " . $component['name'] . " (user declined override)");
+                    continue;
+                }
+                $isOverride = true;
+                note("Building component: " . $component['name'] . " (overriding unchanged version)");
+            }
 
             $registry = [
                 '$schema'     => Constants::SCHEMA_REFERENCE,
@@ -118,7 +136,9 @@ class RegistryBuilder
             }
 
             $outputFile = rtrim($outputDir, '/') . '/' . $component['name'] . '.json';
-            $this->archiveExistingRegistryVersion($outputFile, $component['name']);
+            if (!$isOverride) {
+                $this->archiveExistingRegistryVersion($outputFile, $component['name']);
+            }
             file_put_contents(
                 $outputFile,
                 json_encode($registry, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE)
@@ -242,21 +262,23 @@ class RegistryBuilder
         return array_values(array_unique($messages));
     }
 
-    private function isComposerPackage(string $packageName): bool
+    private function hasVersionChanged(string $outputFile, string $newVersion): bool
     {
-        // PHP packages typically follow vendor/package format
-        if (preg_match('/^[a-zA-Z0-9_-]+\/[a-zA-Z0-9_-]+$/', $packageName)) {
-            return true;
+        if (!file_exists($outputFile)) {
+            return true; // No existing file, so we need to build
         }
-        
-        // Check for common PHP-specific packages
-        $phpPrefixes = ['ext-', 'php', 'lib-'];
-        foreach ($phpPrefixes as $prefix) {
-            if (str_starts_with($packageName, $prefix)) {
-                return true;
-            }
+
+        $existingContent = file_get_contents($outputFile);
+        if ($existingContent === false) {
+            return true; // Can't read existing file, rebuild to be safe
         }
-        
-        return false;
+
+        $existingRegistry = json_decode($existingContent, true);
+        if (!is_array($existingRegistry) || !isset($existingRegistry['version'])) {
+            return true; // Invalid existing file, rebuild
+        }
+
+        $existingVersion = $existingRegistry['version'];
+        return $existingVersion !== $newVersion;
     }
 }

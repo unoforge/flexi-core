@@ -20,9 +20,9 @@ class IconMapping
         'ph--bell-bold' => ['heroicons' => 'heroicons--bell', 'lucide' => 'lucide--bell', 'hugeicons' => 'hugeicons--notification-01', 'solar' => 'solar--bell-bold'],
         
         // Home icons
-        'ph--house' => ['heroicons' => 'heroicons--home', 'lucide' => 'lucide--home', 'hugeicons' => 'hugeicons--home-02', 'solar' => 'solar--home-2-linear'],
-        'ph--house-simple' => ['heroicons' => 'heroicons--home', 'lucide' => 'lucide--home', 'hugeicons' => 'hugeicons--home-01', 'solar' => 'solar--home-linear'],
-        'ph--house-bold' => ['heroicons' => 'heroicons--home', 'lucide' => 'lucide--home', 'hugeicons' => 'hugeicons--home-01', 'solar' => 'solar--home-bold'],
+        'ph--house' => ['heroicons' => 'heroicons--home', 'lucide' => 'lucide--house', 'hugeicons' => 'hugeicons--home-02', 'solar' => 'solar--home-2-linear'],
+        'ph--house-simple' => ['heroicons' => 'heroicons--home', 'lucide' => 'lucide--house', 'hugeicons' => 'hugeicons--home-01', 'solar' => 'solar--home-linear'],
+        'ph--house-bold' => ['heroicons' => 'heroicons--home', 'lucide' => 'lucide--house', 'hugeicons' => 'hugeicons--home-01', 'solar' => 'solar--home-bold'],
         
         // Settings icons
         'ph--gear' => ['heroicons' => 'heroicons--cog-6-tooth', 'lucide' => 'lucide--settings', 'hugeicons' => 'hugeicons--settings-01', 'solar' => 'solar--settings-linear'],
@@ -75,7 +75,7 @@ class IconMapping
         'ph--lock' => ['heroicons' => 'heroicons--lock-closed', 'lucide' => 'lucide--lock', 'hugeicons' => 'hugeicons--lock-key', 'solar' => 'solar--lock-linear'],
         'ph--lock-key' => ['heroicons' => 'heroicons--key', 'lucide' => 'lucide--key', 'hugeicons' => 'hugeicons--key-02', 'solar' => 'solar--key-linear'],
         'ph--lock-bold' => ['heroicons' => 'heroicons--lock-closed', 'lucide' => 'lucide--lock', 'hugeicons' => 'hugeicons--lock', 'solar' => 'solar--lock-bold'],
-        'ph--unlock' => ['heroicons' => 'heroicons--lock-open', 'lucide' => 'lucide--unlock', 'hugeicons' => 'hugeicons--circle-unlock-02', 'solar' => 'solar--lock-unlocked-linear'],
+        'ph--lock-key-open' => ['heroicons' => 'heroicons--lock-open', 'lucide' => 'lucide--lock-open', 'hugeicons' => 'hugeicons--circle-unlock-02', 'solar' => 'solar--lock-unlocked-linear'],
         
         // Communication icons
         'ph--envelope' => ['heroicons' => 'heroicons--envelope', 'lucide' => 'lucide--mail', 'hugeicons' => 'hugeicons--mail-01', 'solar' => 'solar--letter-linear'],
@@ -138,9 +138,9 @@ class IconMapping
         'ph--lightbulb-filament' => ['heroicons' => 'heroicons--light-bulb', 'lucide' => 'lucide--lightbulb', 'hugeicons' => 'hugeicons--idea', 'solar' => 'solar--lightbulb-linear'],
         
         // Shape icons
-        'ph--circle' => ['heroicons' => 'heroicons--circle', 'lucide' => 'lucide--circle', 'hugeicons' => 'hugeicons--circle', 'solar' => 'solar--circle-linear'],
+        'ph--circle' => ['heroicons' => 'heroicons--circle', 'lucide' => 'lucide--circle', 'hugeicons' => 'hugeicons--circle', 'solar' => 'solar--full-screen-circle-linear'],
         'ph--circle-filled' => ['heroicons' => 'heroicons--check-circle', 'lucide' => 'lucide--circle', 'hugeicons' => 'hugeicons--circle', 'solar' => 'solar--check-circle-bold'],
-        'ph--square' => ['heroicons' => 'heroicons--square-3-stack-3d', 'lucide' => 'lucide--square', 'hugeicons' => 'hugeicons--square', 'solar' => 'solar--square-linear'],
-        'ph--square-filled' => ['heroicons' => 'heroicons--square-3-stack-3d', 'lucide' => 'lucide--square', 'hugeicons' => 'hugeicons--square', 'solar' => 'solar--square-bold'],
+        'ph--square' => ['heroicons' => 'heroicons--square-3-stack-3d', 'lucide' => 'lucide--square', 'hugeicons' => 'hugeicons--square', 'solar' => 'solar--full-screen-square-linear'],
+        'ph--square-fill' => ['heroicons' => 'heroicons--square-3-stack-3d', 'lucide' => 'lucide--square', 'hugeicons' => 'hugeicons--square', 'solar' => 'solar--full-screen-square-bold'],
     ];
 }
