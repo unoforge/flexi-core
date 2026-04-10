@@ -10,7 +10,7 @@ class Constants
     /**
      * Default registry URL for component fetching
      */
-    public const DEFAULT_REGISTRY = 'https://raw.githubusercontent.com/unoforge/flexiwind/refs/heads/main/resources/registries{name}.json';
+    public const DEFAULT_REGISTRY = 'https://raw.githubusercontent.com/unoforge/flexiwind/refs/heads/main/resources/registries/{name}.json';
 
     /**
      * Local development registry URL
@@ -25,8 +25,8 @@ class Constants
     /**
      * Schema URLs
      */
-    public const SCHEMA_URL = 'https://raw.githubusercontent.com/unoforge/flexi-core/main/registry-item.json';
-    public const SCHEMA_REFERENCE = 'https://raw.githubusercontent.com/unoforge/flexi-core/main/registry-item.json';
+    public const SCHEMA_URL = 'https://github.com/unoforge/cli/tree/main/packages/core/schema-item.json';
+    public const SCHEMA_REFERENCE = 'https://github.com/unoforge/cli/tree/main/packages/core/schema-item.json';
 
     /**
      * Default configuration file name
