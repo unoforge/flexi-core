@@ -3,9 +3,6 @@
 namespace FlexiCore\Core;
 
 
-use FlexiCore\Core\FileEditor;
-use FlexiCore\Core\StubStorage;
-
 class ConfigWriter
 {
     public static function createFlexiwindYaml(array $answers): void
@@ -38,35 +35,4 @@ class ConfigWriter
 
         file_put_contents('flexiwind.yaml', $yaml);
     }
-
-
-
-    public static function updateTailwindViteConfig(): void
-    {
-        $viteConfigPath = self::findViteConfigFile();
-
-        if (!$viteConfigPath) {
-            throw new \RuntimeException("Vite config file not found. Expected vite.config.js or vite.config.ts");
-        }
-
-        $newConfig = StubStorage::get('tailwind.vite');
-        FileEditor::updateFileContent($viteConfigPath, $newConfig);
-    }
-
-    private static function findViteConfigFile(): ?string
-    {
-        $possibleFiles = [
-            getcwd() . '/vite.config.js',
-            getcwd() . '/vite.config.ts'
-        ];
-
-        foreach ($possibleFiles as $file) {
-            if (file_exists($file)) {
-                return $file;
-            }
-        }
-
-        return null;
-    }
-
 }

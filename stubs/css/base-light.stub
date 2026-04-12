@@ -46,12 +46,14 @@
     --checkbox-checked-color: var(--color-primary);
 
     --dropdown-item-outline: var(--color-primary);
-    --dropdown-item-bg-hover: var(--color-gray-100);
-    --dropdown-item-fg: var(--color-gray-800);
-    --dropdown-item-fg-hover: var(--color-gray-900);
-
-
     --dropdown-item-danger-outline: var(--color-danger);
-    --dropdown-item-danger-bg-hover: var(--color-danger-100);
-    --dropdown-item-danger-fg: var(--color-danger-600);
+    --dropdown-item-hover-and-select: var(--color-bg-muted);
+    --dropdown-item-hover-and-select-fg: var(--color-fg-title);
+    --dropdown-item-selected-fg: var(--color-fg-title);
+    --dropdown-item-danger-fg: var(--color-danger);
+    --dropdown-item-warning-fg: var(--color-warning);
+    --dropdown-item-danger-hover-and-select: --alpha(var(--color-danger-100)/40%);
+    --dropdown-item-danger-hover-and-select-fg: var(--color-danger-600);
+    --dropdown-item-warning-hover-and-select: --alpha(var(--color-warning-100)/40%);
+    --dropdown-item-warning-hover-and-select-fg: var(--color-warning-600);
 }
