@@ -6,8 +6,7 @@
   "type": "object",
   "required": [
     "name",
-    "type",
-    "files"
+    "type"
   ],
   "properties": {
     "$schema": {
@@ -225,6 +224,41 @@
         }
       },
       "additionalProperties": false
+    },
+    "cssVars": {
+      "type": "object",
+      "description": "CSS variables to inject into the entry CSS file, organized by section (theme, light, dark, etc.)",
+      "patternProperties": {
+        "^.+$": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false,
+      "default": {}
+    },
+    "css": {
+      "type": "object",
+      "description": "Raw CSS rules to append to the entry CSS file (@layer, @utility, regular selectors, etc.)",
+      "patternProperties": {
+        "^(@layer|@utility|@media|@supports|[a-zA-Z:._#\\[\\]=\"'-]+)": {
+          "type": "object",
+          "additionalProperties": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "object"
+              }
+            ]
+          }
+        }
+      },
+      "additionalProperties": false,
+      "default": {}
     },
     "meta": {
       "type": "object",

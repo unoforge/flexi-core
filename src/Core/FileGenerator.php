@@ -45,7 +45,6 @@ class FileGenerator
         $theme = $answers['theme'];
         // Create directories if they don't exist
         self::createShared($answers);
-        $themingFolder = strtolower($themingMode) == 'both' ? '' : strtolower($themingMode) . '.';
 
 
         $app_style = CssStyleCompose::get($answers, $themingMode, $theme);
@@ -54,16 +53,6 @@ class FileGenerator
         file_put_contents(
             $cssFolder . "/$mainCssFileName.css",
             $app_style
-        );
-
-
-        file_put_contents(
-            $cssFolder . '/button-styles.css',
-            StubStorage::get('css.' . $themingFolder . 'buttons')
-        );
-        file_put_contents(
-            $cssFolder . '/ui-utilities.css',
-            StubStorage::get('css.' . $themingFolder . 'utilities')
         );
     }
 

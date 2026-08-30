@@ -9,7 +9,7 @@
     {{ $head ?? '' }}
 </head>
 
-<body class="bg-bg min-h-screen overflow-hidden overflow-y-auto">
+<body class="bg-background  min-h-screen overflow-hidden overflow-y-auto">
     {{ $slot }}
     @livewireScripts
         @vite(['resources/js/app.js','resources/js/flexilla.js'])

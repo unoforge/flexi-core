@@ -122,15 +122,7 @@ class FlexiwindInitializer
 
         $this->completedActions[] = "<fg=green>⇒ Created: {$answers['js']}/flexilla.js</>";
         if ($answers['cssFramework'] === 'tailwindcss') {
-            $this->completedActions[] = "<fg=green>⇒ Created: {$answers['css']}/flexiwind/base.css</>";
-            $this->completedActions[] = "<fg=green>⇒ Created: {$answers['css']}/flexiwind/button.css</>";
-            $this->completedActions[] = "<fg=green>⇒ Created: {$answers['css']}/flexiwind/form.css</>";
-            $this->completedActions[] = "<fg=green>⇒ Created: {$answers['css']}/flexiwind/ui.css</>";
-            $this->completedActions[] = "<fg=green>⇒ Created: {$answers['css']}/flexiwind/utils.css</>";
-
-
-            $this->completedActions[] = "<fg=green>⇒ Created: {$answers['css']}/button-styles.css</>";
-            $this->completedActions[] = "<fg=green>⇒ Created: {$answers['css']}/ui-utilities.css</>";
+            $this->completedActions[] = "<fg=yellow>⇒ TODO: Run 'php artisan flexi:add flexiwind-base' to install Flexiwind CSS utilities</>";
         }
     }
 

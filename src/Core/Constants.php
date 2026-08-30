@@ -60,7 +60,26 @@ class Constants
     /**
      * Supported themes
      */
-    public const THEMES = ['flexiwind', 'water', 'earth', 'fire', 'air', 'energy', 'mystery', 'nature', 'romance', 'spring', 'trust', 'winter'];
+    public const THEMES = [
+        'flexiwind',
+        'default',
+        'air',
+        'caffeine',
+        'claude',
+        'earth',
+        'energy',
+        'fire',
+        'mystery',
+        'nature',
+        'oz',
+        'passion',
+        'romance',
+        'spotify',
+        'spring',
+        'trust',
+        'water',
+        'winter',
+    ];
 
     /**
      * Supported theming modes

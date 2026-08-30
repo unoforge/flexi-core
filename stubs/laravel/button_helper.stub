@@ -11,8 +11,8 @@ class ButtonHelper
                 'primary' => 'btn-solid-primary text-white',
                 'secondary' => 'btn-solid-secondary text-white',
                 'success' => 'btn-solid-success text-white',
-                'danger' => 'btn-solid-danger text-white',
-                'neutral'=>'btn-solid-neutral text-bg',
+                'destructive' => 'btn-solid-destructive text-white',
+                'neutral'=>'btn-solid-neutral text-background',
             ],
         ],
         'soft' => [
@@ -34,7 +34,7 @@ class ButtonHelper
             'base' => 'btn-ghost',
             'intents' => [
                 'primary' => 'btn-ghost-primary',
-                'danger' => 'btn-ghost-danger',
+                'destructive' => 'btn-ghost-destructive',
                 'success' => 'btn-ghost-success',
                 'warning' => 'btn-ghost-warning',
                 'gray' => 'btn-ghost-gray',
@@ -47,5 +47,10 @@ class ButtonHelper
     public static function getVariants()
     {
         return self::$variants;
+    }
+
+    public static function normalizeIntent(?string $intent): ?string
+    {
+        return $intent === 'danger' ? 'destructive' : $intent;
     }
 }

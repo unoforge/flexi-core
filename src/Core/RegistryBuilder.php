@@ -72,35 +72,37 @@ class RegistryBuilder
                 }
             }
 
-            spin(message: "Building files", callback: function () use ($component, &$files, $baseDir) {
-                foreach ($component['files'] as $fileItem) {
-                    $filePath = $fileItem['path'];
-                    $fullSourcePath = $baseDir . DIRECTORY_SEPARATOR . $filePath;
+            $componentFiles = $component['files'] ?? [];
+            if (!empty($componentFiles)) {
+                spin(message: "Building files", callback: function () use ($componentFiles, &$files, $baseDir) {
+                    foreach ($componentFiles as $fileItem) {
+                        $filePath = $fileItem['path'];
+                        $fullSourcePath = $baseDir . DIRECTORY_SEPARATOR . $filePath;
 
-                    if (!file_exists($fullSourcePath)) {
-                        warning("⚠️ File not found: {$fullSourcePath} — skipping.");
-                        continue; // Skip to next file
-                    }
-
-                    $content = file_get_contents($fullSourcePath);
-
-                    $fileData = [
-                        'path'    => $filePath,
-                        'type'    => $fileItem['type'] ?? 'registry:component',
-                        'target'  => $fileItem['target'] ?? $filePath,
-                    ];
-
-                    // Apply replacements if defined at the file level
-                    if (isset($fileItem['replace']) && is_array($fileItem['replace'])) {
-                        foreach ($fileItem['replace'] as $search => $replace) {
-                            $content = str_replace($search, $replace, $content);
+                        if (!file_exists($fullSourcePath)) {
+                            warning("⚠️ File not found: {$fullSourcePath} — skipping.");
+                            continue;
                         }
-                    }
 
-                    $fileData['content'] = $content;
-                    $files[] = $fileData;
-                }
-            });
+                        $content = file_get_contents($fullSourcePath);
+
+                        $fileData = [
+                            'path'    => $filePath,
+                            'type'    => $fileItem['type'] ?? 'registry:component',
+                            'target'  => $fileItem['target'] ?? $filePath,
+                        ];
+
+                        if (isset($fileItem['replace']) && is_array($fileItem['replace'])) {
+                            foreach ($fileItem['replace'] as $search => $replace) {
+                                $content = str_replace($search, $replace, $content);
+                            }
+                        }
+
+                        $fileData['content'] = $content;
+                        $files[] = $fileData;
+                    }
+                });
+            }
 
             if (isset($component['registryDependencies'])) {
                 if (!is_array($component['registryDependencies'])) {
@@ -126,7 +128,17 @@ class RegistryBuilder
                 }
             }
 
-            $registry['files'] = $files;
+            if (!empty($files)) {
+                $registry['files'] = $files;
+            }
+
+            if (isset($component['cssVars'])) {
+                $registry['cssVars'] = $component['cssVars'];
+            }
+
+            if (isset($component['css'])) {
+                $registry['css'] = $component['css'];
+            }
 
             if (isset($component['patch'])) {
                 if (!is_array($component['patch'])) {
@@ -141,8 +153,9 @@ class RegistryBuilder
                 }
             }
 
-            if (empty($files)) {
-                warning("⚠️ No valid files for component: " . $component['name']);
+            $hasCssContent = !empty($component['cssVars']) || !empty($component['css']);
+            if (empty($files) && !$hasCssContent) {
+                warning("⚠️ No valid files or CSS for component: " . $component['name']);
                 continue;
             }
 

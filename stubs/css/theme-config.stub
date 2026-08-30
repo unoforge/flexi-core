@@ -3,38 +3,64 @@
     --radius-ui: var(--ui-radius);
     --radius-card: var(--card-radius);
     --radius-card-inner: calc(var(--card-radius) - var(--card-padding));
-    --radius-checkbox: var(--checkbox-radius); 
-    
-    --color-dark: var(--color-gray-950);
+    --radius-checkbox: var(--checkbox-radius);
+
+    --color-background: var(--background);
+    --color-foreground: var(--foreground);
+    --color-title-foreground: var(--fg-title);
+
+    --color-card: var(--card);
+    --color-card-foreground: var(--card-foreground);
+
+    --color-popover: var(--popover);
+    --color-popover-foreground: var(--popover-foreground);
 
     --color-primary: var(--primary);
+    --color-primary-foreground: var(--primary-foreground);
+
     --color-secondary: var(--secondary);
+    --color-secondary-foreground: var(--secondary-foreground);
+
     --color-accent: var(--accent);
-    --color-info: var(--info);
-    --color-warning: var(--warning);
-    --color-danger: var(--danger);
+    --color-accent-foreground: var(--accent-foreground);
+
+    --color-muted: var(--muted);
+    --color-muted-foreground: var(--muted-foreground);
+
+    --color-destructive: var(--destructive);
+    --color-destructive-foreground: var(--destructive-foreground);
+
     --color-success: var(--success);
+    --color-warning: var(--warning);
+    --color-info: var(--info);
 
-    --color-fg-title: var(--fg-title);
-    --color-fg-subtitle: var(--fg-subtitle);
-    --color-fg: var(--fg);
-    --color-fg-muted: var(--fg-muted);
-
-    --color-bg: var(--bg);
-    --color-bg-subtle: var(--bg-subtle);
-    --color-bg-surface: var(--bg-surface);
-    --color-bg-muted: var(--bg-muted);
-    --color-card: var(--card);
-    --color-card-gray: var(--card-gray);
-    --color-popover: var(--bg);
-    --color-popover-gray: var(--card-gray);
-    --color-overlay: var(--overlay);
-    --color-overlay-gray: var(--overlay-gray);
-    --color-progressbar: var(--progressbar);
-
-    --color-border-strong: var(--border-strong);
     --color-border: var(--border);
-    --color-border-sub: var(--border-sub);
+    --color-input: var(--input);
+    --color-ring: var(--ring);
+
+    --color-subtle: var(--bg-subtle);
+    --color-subtitle: var(--fg-subtitle);
+    --color-surface: var(--bg-surface);
+    --color-overlay: var(--popover);
+    --color-border-strong: var(--border-strong);
     --color-border-card: var(--border-card);
     --color-border-input: var(--border-input);
+
+    --color-gray-50: var(--gray-50);
+    --color-gray-100: var(--gray-100);
+    --color-gray-200: var(--gray-200);
+    --color-gray-300: var(--gray-300);
+    --color-gray-400: var(--gray-400);
+    --color-gray-500: var(--gray-500);
+    --color-gray-600: var(--gray-600);
+    --color-gray-700: var(--gray-700);
+    --color-gray-800: var(--gray-800);
+    --color-gray-900: var(--gray-900);
+    --color-gray-950: var(--gray-950);
+
+    --color-chart-1: var(--chart-1);
+    --color-chart-2: var(--chart-2);
+    --color-chart-3: var(--chart-3);
+    --color-chart-4: var(--chart-4);
+    --color-chart-5: var(--chart-5);
 }

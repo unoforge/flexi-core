@@ -4,5 +4,4 @@
 @reference "./flexiwind/button.css";
 @reference "./flexiwind/ui.css";
 @reference "./flexiwind/utils.css";
-@reference "./button-styles.css";
-@reference "./ui-utilities.css";
+@reference "./flexiwind/intents.css";

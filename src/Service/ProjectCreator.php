@@ -4,7 +4,7 @@ namespace FlexiCore\Service;
 
 use FlexiCore\Installer\PackageInstaller;
 
-use function Laravel\Prompts\{text, spin, confirm, select, warning, info};
+use function Laravel\Prompts\{text, spin, confirm, select, warning, info, error};
 
 // TODO: Improve this later
 class ProjectCreator
@@ -41,7 +41,6 @@ class ProjectCreator
             default: 'my-app'
         );
 
-        // Check if directory with the same name already exists in current directory
         while (is_dir($name)) {
             $name = text(
                 label: "The directory '{$name}' already exists. Please enter a different name for your project:",
@@ -52,12 +51,14 @@ class ProjectCreator
         $useStarter = confirm('Do you want to use a starter project?', false);
 
         if ($useStarter) {
-            $isLaravel ? $this->askLaravelStarters() : $this->askSymfonyStarters();
+            $starterRepo = $isLaravel ? $this->askLaravelStarters() : $this->askSymfonyStarters();
 
-
-            // temporary handle folder creation
-            if (!is_dir($name)) {
-                mkdir($name);
+            if ($starterRepo) {
+                $this->cloneStarter($starterRepo, $name);
+            } else {
+                if (!is_dir($name)) {
+                    mkdir($name);
+                }
             }
         } else {
             $createCommand = $isLaravel ? "laravel new $name --no-interaction" : "composer create-project symfony/skeleton $name";
@@ -68,7 +69,6 @@ class ProjectCreator
             info("{$label} project created.");
         }
 
-        // Check if directory was created successfully before changing to it
         if (!is_dir($name)) {
             throw new \Exception("Failed to create project directory: $name");
         }
@@ -100,40 +100,112 @@ class ProjectCreator
         return confirm('Do you want to install Stimulus?');
     }
 
-    private function askLaravelStarters()
+    private function askLaravelStarters(): ?string
     {
-        $starters = select(
-            label: 'What starter do you want to use?',
+        $starter = select(
+            label: 'Which starter kit do you want to use?',
             options: [
-                'tailwind_livewire' => "Livewire + TailwindCSS",
-                'tailwind_blade' => "Blade + TailwindCSS",
-                'tailwind_blade_alpineJS' => "TailwindCSS + AlpineJS + Blade"
+                'livewire' => 'Livewire 4',
+                'livewire-team' => 'Livewire 4 (with Teams)',
             ],
-            default: 'tailwind_livewire',
+            default: 'livewire',
         );
-        warning("OOps, this feature is not yet implemented.");
-        // note("Creating project with starter $starters");
 
-        // handle folder creation
-
-        // clone project
-
-        // think about adding array data for answers 
+        return match ($starter) {
+            'livewire' => 'https://github.com/uno-forge-hub/livewire-starter.git',
+            'livewire-team' => 'https://github.com/uno-forge-hub/livewire-tail-starter-kit.git',
+            default => null,
+        };
     }
 
-    private function askSymfonyStarters()
+    private function askSymfonyStarters(): ?string
     {
-        $starters = select(
-            label: 'What starter do you want to use?',
+        $starter = select(
+            label: 'Which starter kit do you want to use?',
             options: [
-                'stimulus_ux' => "Symfony UX + Stimulus",
-                'stimulus_ux_tailwind' => "Symfony UX + Stimulus + TailwindCSS",
-                'twig_tailwind' => "Twig + TailwindCSS",
-                'twig_alpine' => "Twig + AlpineJS"
+                'stimulus_ux' => 'Symfony UX + Stimulus',
+                'stimulus_ux_tailwind' => 'Symfony UX + Stimulus + TailwindCSS',
+                'twig_tailwind' => 'Twig + TailwindCSS',
+                'twig_alpine' => 'Twig + AlpineJS',
             ],
             default: 'stimulus_ux_tailwind',
         );
 
-        warning("OOps, this feature is not yet implemented.");
+        warning('Symfony starters are coming soon.');
+        return null;
+    }
+
+    private function cloneStarter(string $repoUrl, string $name): void
+    {
+        $success = false;
+
+        spin(
+            callback: function () use ($repoUrl, $name, &$success) {
+                exec("git clone {$repoUrl} {$name} 2>&1", $output, $returnCode);
+                if ($returnCode !== 0) {
+                    return;
+                }
+
+                $gitDir = $name . DIRECTORY_SEPARATOR . '.git';
+                if (is_dir($gitDir)) {
+                    $this->removeDirectory($gitDir);
+                }
+
+                $success = true;
+            },
+            message: "Cloning starter kit into {$name}..."
+        );
+
+        if (!$success) {
+            error("Failed to clone starter from {$repoUrl}");
+            return;
+        }
+
+        info("Starter kit cloned into {$name}");
+
+        $installDeps = confirm('Install dependencies now?', true);
+
+        if ($installDeps) {
+            spin(
+                callback: function () use ($name) {
+                    exec("cd {$name} && composer install 2>&1", $output, $returnCode);
+                },
+                message: 'Installing Composer dependencies...'
+            );
+
+            $packageManager = 'npm';
+            if (file_exists($name . '/pnpm-lock.yaml')) {
+                $packageManager = 'pnpm';
+            } elseif (file_exists($name . '/yarn.lock')) {
+                $packageManager = 'yarn';
+            }
+
+            spin(
+                callback: function () use ($name, $packageManager) {
+                    exec("cd {$name} && {$packageManager} install 2>&1", $output, $returnCode);
+                },
+                message: "Installing Node dependencies ({$packageManager})..."
+            );
+
+            info('Dependencies installed.');
+        }
+    }
+
+    private function removeDirectory(string $dir): void
+    {
+        if (!is_dir($dir)) {
+            return;
+        }
+
+        $items = new \RecursiveIteratorIterator(
+            new \RecursiveDirectoryIterator($dir, \RecursiveDirectoryIterator::SKIP_DOTS),
+            \RecursiveIteratorIterator::CHILD_FIRST
+        );
+
+        foreach ($items as $item) {
+            $item->isDir() ? rmdir($item->getPathname()) : unlink($item->getPathname());
+        }
+
+        rmdir($dir);
     }
 }

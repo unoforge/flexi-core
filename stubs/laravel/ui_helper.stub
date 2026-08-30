@@ -12,7 +12,7 @@ class UiHelper
                 'primary' => 'ui-solid-primary',
                 'secondary' => 'ui-solid-secondary',
                 'success' => 'ui-solid-success',
-                'danger' => 'ui-solid-danger',
+                'destructive' => 'ui-solid-destructive',
                 'warning' => 'ui-solid-warning',
                 'info' => 'ui-solid-info',
                 'gray' => 'ui-solid-gray',
@@ -26,7 +26,7 @@ class UiHelper
                 'secondary' => 'ui-soft-secondary',
                 'accent'=>'ui-soft-accent',
                 'success' => 'ui-soft-success',
-                'danger' => 'ui-soft-danger',
+                'destructive' => 'ui-soft-destructive',
                 'warning' => 'ui-soft-warning',
                 'info' => 'ui-soft-info',
                 'gray' => 'ui-soft-gray',
@@ -39,7 +39,7 @@ class UiHelper
                 'primary' => 'ui-subtle-primary',
                 'secondary' => 'ui-subtle-secondary',
                 'success' => 'ui-subtle-success',
-                'danger' => 'ui-subtle-danger',
+                'destructive' => 'ui-subtle-destructive',
                 'accent'=>'ui-subtle-accent',
                 'warning' => 'ui-subtle-warning',
                 'info' => 'ui-subtle-info',
@@ -53,7 +53,7 @@ class UiHelper
                 'primary' => 'ui-outline-primary',
                 'secondary' => 'ui-outline-secondary',
                 'success' => 'ui-outline-success',
-                'danger' => 'ui-outline-danger',
+                'destructive' => 'ui-outline-destructive',
                 'warning' => 'ui-outline-warning',
                 'info' => 'ui-outline-info',
                 'gray' => 'ui-outline-gray',
@@ -70,9 +70,15 @@ class UiHelper
 
     public static function getClasses(string $variant = 'solid', ?string $intent = 'gray'): string
     {
+        $intent = self::normalizeIntent($intent);
         $variantConfig = self::$variants[$variant] ?? [];
         $base = $variantConfig['base'] ?? '';
         $intentClass = $variantConfig['intent'][$intent] ?? '';
         return trim("$base $intentClass");
+    }
+
+    public static function normalizeIntent(?string $intent): ?string
+    {
+        return $intent === 'danger' ? 'destructive' : $intent;
     }
 }

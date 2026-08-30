@@ -1,0 +1,27 @@
+--ui-input-focus-outline: var(--primary);
+--ui-input-place-holder: var(--muted-foreground);
+--ui-input-fg: var(--foreground);
+--ui-input-invalid-outline: var(--destructive);
+
+--ring-background: var(--primary);
+--ring-offset-color: var(--background);
+--focus-ring: color-mix(in oklab, var(--primary) 24%, transparent);
+
+--ui-radius: 0.5rem;
+--card-radius: 0.5rem;
+--card-padding: 0.25rem;
+--checkbox-radius: 0.25rem;
+--checkbox-bg: var(--background);
+--checkbox-checked-color: var(--primary);
+
+--dropdown-item-outline: var(--primary);
+--dropdown-item-danger-outline: var(--destructive);
+--dropdown-item-hover-and-select: var(--muted);
+--dropdown-item-hover-and-select-fg: var(--title-foreground);
+--dropdown-item-selected-fg: var(--title-foreground);
+--dropdown-item-danger-fg: var(--destructive);
+--dropdown-item-warning-fg: var(--warning);
+--dropdown-item-danger-hover-and-select: color-mix(in oklab, var(--destructive) 10%, transparent);
+--dropdown-item-danger-hover-and-select-fg: var(--destructive);
+--dropdown-item-warning-hover-and-select: color-mix(in oklab, var(--warning) 10%, transparent);
+--dropdown-item-warning-hover-and-select-fg: var(--warning);
